@@ -104,8 +104,8 @@ def show_about():
     Button(about_frame, text="Back", bd=0, fg=WHITE, bg="light green", cursor='hand2', pady=10, padx=15,
            font=("Arial", 14, "bold"), highlightthickness=0, command=go_back).place(y=20, x=385)
     
-    Label(about_frame, text="Creators", font=("Courier", 20, "bold"), fg=BLACK, bg=WHITE).place(x=200, y=90)
-    Label(about_frame, text=' S Sonim\n M Aashiq Kumar\n A Rammani\n M Mandeep', fg=BLACK, bg=WHITE,
+    Label(about_frame, text="Creators", font=("Courier", 30, "bold"), fg=BLACK, bg=WHITE).place(x=200, y=90)
+    Label(about_frame, text=' -S Swornim\n -M Aashiq Kumar\n -A Rammani\n -M Mandeep', font=FONT,fg=BLACK, bg=WHITE,
           justify=LEFT).place(x=180, y=130)
     pass
 
@@ -391,9 +391,9 @@ def pick_due_date():
         showothermonthdays=False
     )
     confirm_date_button = Button(add_hw_tab, text='Confirm date', cursor='hand1',
-                                 command=lambda: insert_to_due_entry(date_picked))
+                                 bg = BLUE, command=lambda: insert_to_due_entry(date_picked))
     confirm_date_button.grid(row=4, column=5)
-    calendar.grid(row=4, column=3)
+    calendar.grid(row=4, column=2)
 
 
 def add_hw_button(tab_hw):
@@ -404,24 +404,24 @@ def add_hw_button(tab_hw):
     notebook.select(add_hw_tab)
     
     # 1st row
-    Label(tab_hw, text="Enter Subject", font=FONT, pady=10, padx=20).grid(row=1, column=1)
+    Label(tab_hw, text="Enter Subject", font=FONT,bg = 'white', pady=10, padx=20).grid(row=1, column=1)
     hw_subject_entry = Entry(tab_hw, width=40, font=FONT)
     hw_subject_entry.focus()
     hw_subject_entry.grid(row=1, column=2)
     
     # 2nd row
-    Label(tab_hw, text="Enter Description", font=FONT, pady=10, padx=20).grid(row=2, column=1)
+    Label(tab_hw, text="Enter Description", font=FONT, pady=10,bg = 'white', padx=20).grid(row=2, column=1)
     hw_content_entry = Entry(tab_hw, width=40, font=FONT)
     hw_content_entry.grid(row=2, column=2)
     
     # 3rd row
-    Label(tab_hw, text="Enter Due date", font=FONT, pady=10, padx=20).grid(row=3, column=1)
+    Label(tab_hw, text="Enter Due date", font=FONT, pady=10,bg = 'white',padx=20).grid(row=3, column=1)
     hw_due_entry = Entry(tab_hw, width=40, font=FONT)
     hw_due_entry.grid(row=3, column=2)
     
     # the calendar emoji  🗓 doses not display correctly
-    pick_date_button = Button(tab_hw, text="📅Pick a date 🗓️", cursor='hand2', font=FONT, command=pick_due_date)
-    pick_date_button.grid(row=3, column=3)
+    pick_date_button = Button(tab_hw,bg = BLUE, text="📅Pick a date 🗓️", cursor='hand2', font=FONT, command=pick_due_date)
+    pick_date_button.grid(row=4, column=2)
     
     # save button
     Button(tab_hw, text="Save Homework", font=FONT, command=save_hw, cursor='hand1').grid(row=5, column=2)
@@ -456,21 +456,19 @@ class HomeworkDisplay:
         self.status = Label(assignments_tab, text='Due', fg='red', font=FONT, bg=WHITE)
         self.status.grid(row=row, column=col)
         
-        self.subject = Label(assignments_tab, text=f"{subject}", wraplength=150, padx=10, font=FONT, bg=GREEN)
+        self.subject = Label(assignments_tab, text=f"{subject}", wraplength=150, bg=WHITE, padx=10, font=FONT)
         self.subject.grid(row=row, column=col + 1)
         
-        self.description = Label(assignments_tab, text=f"{hw[subject]['description']}", width=35, wraplength=400,
-                                 padx=20, font=FONT, bg=RED)
+        self.description = Label(assignments_tab,  bg=WHITE,text=f"{hw[subject]['description']}", width=35, wraplength=400,
+                                 padx=20, font=FONT)
         self.description.grid(row=row, column=col + 2)
         
         self.due = Label(assignments_tab, text=f"{hw[subject]['due_date']}", padx=10, font=FONT, bg=WHITE)
         self.due.grid(row=row, column=col + 3)
         
-        if hw[subject]['completed'] is True:
-            self.status.configure(text="Completed", fg=GREEN)
-        
         self.delete_btn = Button(assignments_tab, text="delete")
-        self.delete_btn.configure(image=bin_image, bg=WHITE, borderwidth=0, highlightthickness=0, command=self.hide)
+        self.delete_btn.configure(image=bin_image, bg=WHITE, borderwidth=0, highlightthickness=0,
+                                  command=self.hide)
         self.delete_btn.grid(row=row, column=col + 4)
         
         # ttk.Separator(assignments_tab, orient=HORIZONTAL).grid(row=3, column=0, columnspan=6, sticky='ew')
@@ -555,7 +553,7 @@ def show_todos():
         todos = json.load(read_file)[f"{USERNAME}"]['todo']
     row = 2
     for a_title in todos:
-        Label(todo_tab, text=f'{a_title}', font=FONT, bg=WHITE).grid(row=row, column=0)  # title
+        Label(todo_tab, text=f'{a_title}', bg = 'white',font=FONT).grid(row=row, column=0)  # title
         Label(todo_tab, text=f"{todos[a_title]['description']}", font=FONT, justify=LEFT, bg=WHITE, fg=BLACK).grid(
             row=row, column=1)
         row += 1
@@ -622,11 +620,7 @@ def save_todo():
         with open("data.json", mode='w') as write_file:
             json.dump(complete_data, write_file, indent=4)
         messagebox.showinfo(title='Todo Added', message='Todo has been created.')
-        
-        todo_content_entry.delete(1.0, END)
-        todo_title_entry.delete(0, END)
-        notebook.tab(add_todo_tab, state='hidden')
-        notebook.select(todo_tab)
+        temp_frame.destroy()
         show_todos()
 
 
@@ -639,14 +633,11 @@ def n_on_leave(event):
 
 
 all_notes = []
-note_id = 100
+
 
 class Note:
     def __init__(self, row: int, column: int):
         self.text = None
-        self.key = None
-        self.new_note = None
-        self.i = 0
         self.frame = Frame(notes_tab)
         self.frame.configure(height=250, width=200)
         self.frame.grid(row=row, column=column, padx=15, pady=10)
@@ -656,45 +647,23 @@ class Note:
         self.text_box.focus()
         self.text_box.grid(row=row, column=column)
         
-        self.close_button = Button(self.frame, text="X", fg=BLACK, bg=RED, cursor='hand1',
-                                   command=self.close)
+        self.del_button = Button(self.frame, text="X", fg=BLACK, bg=RED, cursor='hand1',
+                                 command=self.delete)
         # self.del_button.tkraise()
-        self.close_button.grid(row=row, column=column, sticky="en")
+        self.del_button.grid(row=row, column=column, sticky="en")
         
-        self.save_button = Button(self.frame, text="Save", command=lambda:self.save(USERNAME), cursor='hand1', bg=LIGHT_YELLOW)
+        self.save_button = Button(self.frame, text="Save", command=self.save, cursor='hand1', bg=LIGHT_YELLOW)
         self.save_button.grid(row=row, column=column, sticky='s')
-        
-        self.del_button = Button(self.frame, text="Delete", command=self.delete, cursor='hand1', bg=LIGHT_YELLOW)
-        self.del_button.grid(row=row, column=column, sticky='se')
     
-    def save(self, user):
-        self.text = self.text_box.get(index1=1.0, index2='end').strip()
-        if len(self.text.strip('\n')) > 0:
-            if self.i == 0:
-                self.key = f"{self.text}"
-                self.i += 1
-            
-            with open('data.json') as read_file:
-                whole_data: dict = json.load(read_file)
-            user_notes = whole_data[f"{user}"]['notes']
-            # self.new_note = {
-            #     self.key: {
-            #         "content": f"{self.text_box.get(index1=1.0, index2='end')}"
-            #     }
-            # }
-            user_notes[self.key] = f"{self.text_box.get(index1=1.0, index2='end')}"
-            messagebox.showinfo(title="Saved", parent=notes_tab, message=f"Note has been saved:\n{self.text}")
-
-        
+    def save(self, ):
+        self.text = self.text_box.get(index1=1.0, index2='end')
+        messagebox.showinfo(title="Saved", message=f"Note has been saved:\n{self.text}")
+        print(self.text)
+    
     def delete(self):
-        pass
-    
-    def close(self):
         global note_row, note_column
         self.frame.destroy()
-        
-    # def show_message(self):
-    #     messagebox.showinfo(title="Saved", parent=self.frame, message=f"Note has been saved:\n{self.text}")
+
 
 def create_note_box():
     global note_row, note_column
@@ -812,11 +781,11 @@ if LOGGED_IN:
     refresh_homeworks()
     
     # todo_tab
-    Label(todo_tab, text="Anything you want to do later? Add them here.",bg=WHITE, font=FONT).grid(row=0, column=0, columnspan=2)
-    todo_create_button = Button(todo_tab, text="Create", command=create_todo, cursor='hand1', font=FONT,
-                                background='white', borderwidth=0)
+    Label(todo_tab, text="Anything you want to do later? Add them here.\t\t",bg = WHITE,font=FONT).grid(row=0, column=0, columnspan=2)
+    todo_create_button = Button(todo_tab, text="Create", command=create_todo, cursor='hand1',bg = BLUE, font=FONT,
+                                fg = WHITE, borderwidth=0)
     todo_create_button.grid(row=0, column=2)
-    ttk.Separator()
+    Label(todo_tab,text = "",bg = 'white').grid(row = 1,column = 0)
     show_todos()
     
     # note tab  
@@ -843,53 +812,30 @@ if LOGGED_IN:
     todo_words = selection_sort(todo_words)
     assignment_words = selection_sort(assignment_words)
     note_words = selection_sort(note_words)
-
-    def select_tab(tab_no):
-        notebook.select(tab_no)
-
-    frame = Frame(dash_tab)
     
-    def search_and_show(word, *word_lists):
-        global frame
+    
+    def find(word, *word_lists):
         found = False
-        for widget in frame.winfo_children():
-            widget.destroy()
-        frame.grid(row=3, column=3, columnspan=2)
-        tree = ttk.Treeview(frame)
-        #
-        # style = ttk.Style(assignments_tab)
-        # style.configure('Treeview', font=('arial', 16, 'bold'))
-        
-        tree.heading('#0', text="Result")
-    
-        if word in word_lists[0][0]:
-            tree.insert(parent='', index='end', iid=0, text=f"'{word}' found in dash")
+        print(word_lists[0])
+        if word in word_lists[0]:
+            print(f"{word} found in dash")
             found = True
-        if word in word_lists[0][1]:
-            tree.insert(parent='', index='end', iid=1, text=f"'{word}' found in assignment")
+        if word in word_lists[1]:
+            print(f"{word} found in assignment")
             found = True
-        if word in word_lists[0][2]:
-            tree.insert(parent='', index='end', iid=3, text=f"'{word}' found in todo")
+        if word in word_lists[2]:
+            print(f"{word} found in todo")
             found = True
-        if word in word_lists[0][3]:
-            tree.insert(parent='', index='end', iid=2, text=f"'{word}' found in notes")
+        if word in word_lists[3]:
+            print(f"{word} found in notes")
             found = True
         if not found:
-            tree.insert(parent='', index='end',iid=0, text=f"'{word}' not found.")
+            print(f"{word}not found")
     
-        def on_select(event):
-            item = tree.selection()[0]
-            select_tab(item)
     
-        tree.pack()
-        tree.focus_set()
-        tree.selection_set(tree.get_children()[0])
-        tree.bind('<Return>', on_select)
-
-
     words = (dash_words, assignment_words, todo_words, note_words)
     Button(dash_tab, text="Search", font=FONT, cursor='hand1', bg=GREEN,
-           command=lambda: search_and_show(search_box.get(), words)).grid(row=2, column=3, pady=20)
+           command=lambda: find(search_box.get(), words)).grid(row=2, column=3, pady=20)
     
     # print(dash_words)
     
